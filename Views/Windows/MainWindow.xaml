@@ -48,21 +48,13 @@
             IsBackButtonVisible="Visible"
             IsPaneToggleVisible="True"
             MenuItemsSource="{Binding ViewModel.MenuItems, Mode=OneWay}"
-            OpenPaneLength="310"
+            OpenPaneLength="125"
             PaneDisplayMode="Left"
             TitleBar="{Binding ElementName=TitleBar, Mode=OneWay}">
       <ui:NavigationView.Header>
         <ui:BreadcrumbBar x:Name="BreadcrumbBar" Margin="42,32,42,20" />
       </ui:NavigationView.Header>
-      <ui:NavigationView.AutoSuggestBox>
-        <ui:AutoSuggestBox x:Name="AutoSuggestBox" PlaceholderText="Search">
-          <ui:AutoSuggestBox.Icon>
-            <ui:IconSourceElement>
-              <ui:SymbolIconSource Symbol="Search24" />
-            </ui:IconSourceElement>
-          </ui:AutoSuggestBox.Icon>
-        </ui:AutoSuggestBox>
-      </ui:NavigationView.AutoSuggestBox>
+
       <ui:NavigationView.ContentOverlay>
         <Grid>
           <ui:SnackbarPresenter x:Name="SnackbarPresenter" />

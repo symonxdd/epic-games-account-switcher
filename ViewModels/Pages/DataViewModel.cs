@@ -24,7 +24,7 @@ namespace AccountSwitcher.ViewModels.Pages
       var random = new Random();
       var colorCollection = new List<DataColor>();
 
-      for (int i = 0; i < 8192; i++)
+      for (int i = 0; i < 10; i++)
         colorCollection.Add(
             new DataColor
             {

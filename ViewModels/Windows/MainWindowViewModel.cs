@@ -6,7 +6,7 @@ namespace AccountSwitcher.ViewModels.Windows
   public partial class MainWindowViewModel : ObservableObject
   {
     [ObservableProperty]
-    private string _applicationTitle = "WPF UI - AccountSwitcher";
+    private string _applicationTitle = "Account Switcher";
 
     [ObservableProperty]
     private ObservableCollection<object> _menuItems = new()
@@ -16,12 +16,6 @@ namespace AccountSwitcher.ViewModels.Windows
                 Content = "Home",
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
                 TargetPageType = typeof(Views.Pages.DashboardPage)
-            },
-            new NavigationViewItem()
-            {
-                Content = "Data",
-                Icon = new SymbolIcon { Symbol = SymbolRegular.DataHistogram24 },
-                TargetPageType = typeof(Views.Pages.DataPage)
             }
         };
 

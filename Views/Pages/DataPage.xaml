@@ -18,14 +18,14 @@
     ScrollViewer.CanContentScroll="False"
     mc:Ignorable="d">
 
-    <Grid>
-        <ui:VirtualizingItemsControl
+  <Grid>
+    <ui:VirtualizingItemsControl
             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
             ItemsSource="{Binding ViewModel.Colors, Mode=OneWay}"
             VirtualizingPanel.CacheLengthUnit="Item">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:DataColor}">
-                    <ui:Button
+      <ItemsControl.ItemTemplate>
+        <DataTemplate DataType="{x:Type models:DataColor}">
+          <ui:Button
                         Width="80"
                         Height="80"
                         Margin="2"
@@ -36,8 +36,8 @@
                         Background="{Binding Color, Mode=OneWay}"
                         FontSize="25"
                         Icon="Fluent24" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ui:VirtualizingItemsControl>
-    </Grid>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ui:VirtualizingItemsControl>
+  </Grid>
 </Page>
