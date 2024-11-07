@@ -6,7 +6,7 @@ namespace AccountSwitcher.ViewModels.Windows
   public partial class MainWindowViewModel : ObservableObject
   {
     [ObservableProperty]
-    private string _applicationTitle = "Account Switcher";
+    private string _applicationTitle = "Epic Switcher";
 
     [ObservableProperty]
     private ObservableCollection<object> _menuItems = new()

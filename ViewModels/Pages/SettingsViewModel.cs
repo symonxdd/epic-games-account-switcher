@@ -24,7 +24,7 @@ namespace AccountSwitcher.ViewModels.Pages
     private void InitializeViewModel()
     {
       CurrentTheme = ApplicationThemeManager.GetAppTheme();
-      AppVersion = $"Account Switcher - {GetAssemblyVersion()}";
+      AppVersion = $"Epic Switcher - {GetAssemblyVersion()}";
 
       _isInitialized = true;
     }
