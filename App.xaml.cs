@@ -43,7 +43,7 @@ namespace AccountSwitcher
           // Service containing navigation, same as INavigationWindow... but without window
           services.AddSingleton<INavigationService, NavigationService>();
 
-          services.AddSingleton<IEpicSettingsService, EpicSettingsService>();
+          services.AddSingleton<IEpicService, EpicService>();
           services.AddSingleton<IEpicLogReaderService, EpicLogReaderService>();
 
           // Main window with navigation

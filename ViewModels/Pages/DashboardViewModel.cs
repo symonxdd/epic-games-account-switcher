@@ -5,12 +5,12 @@ namespace AccountSwitcher.ViewModels.Pages
 {
   public partial class DashboardViewModel : ObservableObject
   {
-    private readonly IEpicSettingsService _epicSettingsService;
+    private readonly IEpicService _epicService;
     private readonly IEpicLogReaderService _epicLogReaderService;
 
-    public DashboardViewModel(IEpicSettingsService epicSettingsService, IEpicLogReaderService epicLogReaderService)
+    public DashboardViewModel(IEpicService epicService, IEpicLogReaderService epicLogReaderService)
     {
-      _epicSettingsService = epicSettingsService;
+      _epicService = epicService;
       _epicLogReaderService = epicLogReaderService;
       MyCollection = new ObservableCollection<string>();
 
@@ -27,9 +27,10 @@ namespace AccountSwitcher.ViewModels.Pages
 
     private async Task LoadAccountStatusAsync()
     {
-      string status = await _epicSettingsService.CheckAccountStatusAsync();
-      MyCollection.Clear();
-      MyCollection.Add(status);
+      bool status = await _epicService.IsUserLoggedInAsync();
+
+      //MyCollection.Clear();
+      //MyCollection.Add(status);
     }
 
     // The method the command will execute

@@ -2,21 +2,21 @@
 using System.Text.RegularExpressions;
 using AccountSwitcher.Services.Interfaces;
 
-public class EpicSettingsService : IEpicSettingsService
+public class EpicService : IEpicService
 {
   private readonly string _logFilePath = @"C:\Users\Symon\AppData\Local\EpicGamesLauncher\Saved\Config\Windows\GameUserSettings.ini";
 
-  public async Task<string> CheckAccountStatusAsync()
+  public async Task<bool> IsUserLoggedInAsync()
   {
-    if (!File.Exists(_logFilePath)) return "No account";
+    if (!File.Exists(_logFilePath)) return false;
 
     string logContent = await File.ReadAllTextAsync(_logFilePath);
     string pattern = @"Data=([^\r\n]+)";
     Match match = Regex.Match(logContent, pattern);
 
     if (match.Success && match.Groups[1].Value.Length >= 250)
-      return "Current account";
+      return true;
 
-    return "No account";
+    return false;
   }
 }
