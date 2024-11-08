@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Windows.Threading;
 using AccountSwitcher.Services;
+using AccountSwitcher.Services.Interfaces;
 using AccountSwitcher.ViewModels.Pages;
 using AccountSwitcher.ViewModels.Windows;
 using AccountSwitcher.Views.Pages;
@@ -30,7 +31,7 @@ namespace AccountSwitcher
         {
           services.AddHostedService<ApplicationHostService>();
 
-          // Page resolver service
+          // Page resolver service 
           services.AddSingleton<IPageService, PageService>();
 
           // Theme manipulation
@@ -42,16 +43,21 @@ namespace AccountSwitcher
           // Service containing navigation, same as INavigationWindow... but without window
           services.AddSingleton<INavigationService, NavigationService>();
 
+          services.AddSingleton<IEpicSettingsService, EpicSettingsService>();
+          services.AddSingleton<IEpicLogReaderService, EpicLogReaderService>();
+
           // Main window with navigation
           services.AddSingleton<INavigationWindow, MainWindow>();
           services.AddSingleton<MainWindowViewModel>();
 
-          services.AddSingleton<DashboardPage>();
           services.AddSingleton<DashboardViewModel>();
-          services.AddSingleton<DataPage>();
-          services.AddSingleton<DataViewModel>();
-          services.AddSingleton<SettingsPage>();
           services.AddSingleton<SettingsViewModel>();
+          services.AddSingleton<DataViewModel>();
+
+          services.AddSingleton<DashboardPage>();
+          services.AddSingleton<SettingsPage>();
+          services.AddSingleton<DataPage>();
+
         }).Build();
 
     /// <summary>
