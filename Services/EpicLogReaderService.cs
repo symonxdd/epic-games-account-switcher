@@ -6,6 +6,9 @@ namespace AccountSwitcher.Services
 {
   internal class EpicLogReaderService : IEpicLogReaderService
   {
+    // Can freely be changed
+    private const string BaseFolderName = "Epic Switcher (those who know)";
+
     // Path to the logs directory (example path, adjust as necessary)
     private readonly string logsDirectory = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -14,7 +17,7 @@ namespace AccountSwitcher.Services
     // Define the directory path in AppData (LocalApplicationData)
     private readonly string appDataFolder = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "Epic Switcher (those who know)" // You can change this to match your application's name       
+        BaseFolderName
     );
 
     // Ensure the directory exists
@@ -43,7 +46,7 @@ namespace AccountSwitcher.Services
       // Find all log files with 'EpicGamesLauncher' in the filename
       var logFiles = Directory.GetFiles(logsDirectory, "*EpicGamesLauncher*.log")
                               .OrderByDescending(f => new FileInfo(f).LastWriteTime)
-                              //.Take(2) // Only take the two most recent files
+                              .Take(3) // Only take the n most recent files
                               .ToList();
 
       // Guard clause: If no log files found, exit early
@@ -150,7 +153,5 @@ namespace AccountSwitcher.Services
         Console.WriteLine($"Error saving data to file: {ex.Message}");
       }
     }
-
-
   }
 }

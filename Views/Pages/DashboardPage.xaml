@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:AccountSwitcher.Views.Pages"   
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    Title="DashboardPage"
+  Title="DashboardPage"
     d:DataContext="{d:DesignInstance local:DashboardPage,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="450"
@@ -16,8 +16,43 @@
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
 
-  <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-    <ComboBox Margin="0,0,0,10" SelectedIndex="0" ItemsSource="{Binding ViewModel.MyCollection}"/>
-    <Button Margin="0,10,0,0" Content="Test Epic Reader" Command="{Binding ViewModel.TestEpicReaderCommand}"/>
-  </StackPanel>
+  <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid.RowDefinitions>
+      <!-- Main content row takes up remaining space -->
+      <RowDefinition Height="*"/>
+
+      <!-- Bottom row for InfoBar -->
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!-- Main content stack placed in the first row -->
+    <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+      <TextBlock Margin="0,0,0,7" Text="Select account" />
+      <ComboBox Margin="0,0,0,0"
+                  HorizontalAlignment="Left"
+                  ItemsSource="{Binding ViewModel.MyCollection}"
+                  SelectedItem="{Binding ViewModel.SelectedItem, Mode=TwoWay}"
+                  SelectionChanged="ComboBox_SelectionChanged" />
+
+      <TextBlock Margin="0,20,0,7" Text="Add new login" />
+      <Button Margin="0,0,0,0" Content="Add" Command="{Binding ViewModel.OpenFlyoutCommand}" />
+
+      <ui:Flyout Placement="MousePoint" IsOpen="{Binding ViewModel.IsFlyoutOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:DashboardPage}, Mode=TwoWay}">
+        <StackPanel>
+          <TextBlock Width="280" TextWrapping="Wrap">
+            <Bold>This will restart the Epic Games Launcher.</Bold>                     
+            <LineBreak />
+            <Run Text="After you log into your other account, come back to switch between them! 🥭" />
+          </TextBlock>
+          <Button Margin="0,8,0,0" Content="Add New Login" Command="{Binding ViewModel.AddLoginCommand}" />
+        </StackPanel>
+      </ui:Flyout>
+
+      <Button Margin="0,30,0,0" Content="Test Epic Reader" Command="{Binding ViewModel.TestEpicReaderCommand}" />
+    </StackPanel>
+
+    <!-- InfoBar anchored to the bottom row, with bottom margin -->
+    <ui:InfoBar Grid.Row="1" Title="Title" Message="Essential message." IsOpen="True"
+                HorizontalAlignment="Stretch" Margin="0,0,0,20" />
+  </Grid>
 </Page>

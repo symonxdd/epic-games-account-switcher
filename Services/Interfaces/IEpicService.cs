@@ -2,6 +2,9 @@
 {
   public interface IEpicService
   {
-    Task<bool> IsUserLoggedInAsync();
+    Task<string?> GetLoggedInUsername();
+    Task<List<string>> GetAllActiveLoginSessionsAsync();
+    Task AddLoginAsync();
+    Task SwitchAccountAsync(string selectedUsername);
   }
 }
