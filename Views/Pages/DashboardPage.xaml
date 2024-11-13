@@ -6,7 +6,8 @@
     xmlns:local="clr-namespace:AccountSwitcher.Views.Pages"   
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-  Title="DashboardPage"
+
+    Title="DashboardPage"
     d:DataContext="{d:DesignInstance local:DashboardPage,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="450"
@@ -39,14 +40,21 @@
 
       <ui:Flyout Placement="MousePoint" IsOpen="{Binding ViewModel.IsFlyoutOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:DashboardPage}, Mode=TwoWay}">
         <StackPanel>
+
+
           <TextBlock Width="280" TextWrapping="Wrap">
-            <Bold>This will restart the Epic Games Launcher.</Bold>                     
-            <LineBreak />
-            <Run Text="After you log into your other account, come back to switch between them! 🥭" />
+           <Bold>This will restart the Epic Games Launcher.</Bold>
+           <LineBreak />
+           <Run Text="After you log into your other account, come back to switch between them! " />
+           <InlineUIContainer BaselineAlignment="Center">
+             <Image Source="pack://application:,,,/Assets/emoji_mango.png" Width="18" Height="18"
+                    RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
+           </InlineUIContainer>
           </TextBlock>
-          <Button Margin="0,8,0,0" Content="Add New Login" Command="{Binding ViewModel.AddLoginCommand}" />
+          <Button Margin="0,12,0,0" Content="Add New Login" Command="{Binding ViewModel.AddLoginCommand}" />
         </StackPanel>
       </ui:Flyout>
+
 
       <Button Margin="0,30,0,0" Content="Test Epic Reader" Command="{Binding ViewModel.TestEpicReaderCommand}" />
     </StackPanel>
