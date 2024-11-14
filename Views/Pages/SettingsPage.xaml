@@ -20,32 +20,59 @@
     <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
   </Page.Resources>
 
-  <StackPanel>
-    <TextBlock
-      FontSize="20"
-      FontWeight="Medium"
-      Text="Personalization" />
-    <TextBlock Margin="0,12,0,0" Text="Theme" />
-    <RadioButton
-      Margin="0,12,0,0"
-      Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
-      CommandParameter="theme_light"
-      Content="Light"
-      GroupName="themeSelect"
-      IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}" />
-    <RadioButton
-      Margin="0,8,0,0"
-      Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
-      CommandParameter="theme_dark"
-      Content="Dark"
-      GroupName="themeSelect"
-      IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
+  <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid.RowDefinitions>
+      <!-- Main content row takes up remaining space -->
+      <RowDefinition Height="*" />
 
-    <TextBlock
-      Margin="0,24,0,0"
-      FontSize="20"
-      FontWeight="Medium"
-      Text="About Epic Switcher" />
-    <TextBlock Margin="0,12,0,0" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
-  </StackPanel>
+      <!-- Bottom row for InfoBar -->
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <!-- Main content stack placed in the first row -->
+    <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+      <TextBlock Margin="0,0,0,7" Text="Add new login" />
+      <Button Content="Add" Command="{Binding ViewModel.OpenFlyoutCommand}" />
+
+      <ui:Flyout Placement="MousePoint" IsOpen="{Binding ViewModel.IsFlyoutOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:SettingsPage}, Mode=TwoWay}">
+        <StackPanel>
+          <TextBlock Width="280" TextWrapping="Wrap">
+            <InlineUIContainer >
+              <TextBlock Margin="0,0,0,2" FontWeight="Bold">This will restart the Epic Games Launcher.</TextBlock>
+            </InlineUIContainer>
+            <LineBreak/>
+             
+            <Run Text="After you log into your other account, come back to switch!" />
+            <InlineUIContainer BaselineAlignment="Center">
+              <Image Source="pack://application:,,,/Assets/emoji_mango.png" Width="18" Height="18"
+                     RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
+            </InlineUIContainer>
+          </TextBlock>
+          <Button Margin="0,12,0,0" Content="Add New Login" Command="{Binding ViewModel.AddLoginCommand}" />
+        </StackPanel>
+      </ui:Flyout>
+
+      <TextBlock Margin="0,0,0,7" Text="Perform a scan to find changed or new login usernames" />
+      <Button Margin="0,0,0,0" Content="Scan" Command="{Binding ViewModel.TestEpicReaderCommand}" />
+
+      <Border Margin="0,20,0,20">
+        <Separator Height="1" Background="#E1E1E1" />
+      </Border>
+
+      <TextBlock Margin="0,0,0,0" Text="Theme" />
+      <RadioButton Margin="0,12,0,0" Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}" CommandParameter="theme_light"
+                   Content="Light" GroupName="themeSelect"
+                   IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}" />
+      <RadioButton Margin="0,8,0,0" Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}" CommandParameter="theme_dark"
+                   Content="Dark" GroupName="themeSelect"
+                   IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
+    </StackPanel>
+
+    <StackPanel Grid.Row="1" Margin="0,0,0,20" Orientation="Horizontal" ToolTipService.ToolTip="winter arc + those who know = the substance">
+      <TextBlock Text="Crafted with " VerticalAlignment="Center"/>
+      <Image Source="pack://application:,,,/Assets/emoji_heart.png" Width="18" Height="18"
+          RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Margin="0,0,0,0" />
+      <TextBlock Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
+    </StackPanel>
+  </Grid>
 </Page>

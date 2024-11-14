@@ -29,38 +29,22 @@
     <!-- Main content stack placed in the first row -->
     <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
       <TextBlock Margin="0,0,0,7" Text="Select account" />
-      <ComboBox Margin="0,0,0,0"
-                  HorizontalAlignment="Left"
-                  ItemsSource="{Binding ViewModel.MyCollection}"
-                  SelectedItem="{Binding ViewModel.SelectedItem, Mode=TwoWay}"
-                  SelectionChanged="ComboBox_SelectionChanged" />
 
-      <TextBlock Margin="0,20,0,7" Text="Add new login" />
-      <Button Margin="0,0,0,0" Content="Add" Command="{Binding ViewModel.OpenFlyoutCommand}" />
-
-      <ui:Flyout Placement="MousePoint" IsOpen="{Binding ViewModel.IsFlyoutOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:DashboardPage}, Mode=TwoWay}">
-        <StackPanel>
-
-
-          <TextBlock Width="280" TextWrapping="Wrap">
-           <Bold>This will restart the Epic Games Launcher.</Bold>
-           <LineBreak />
-           <Run Text="After you log into your other account, come back to switch between them! " />
-           <InlineUIContainer BaselineAlignment="Center">
-             <Image Source="pack://application:,,,/Assets/emoji_mango.png" Width="18" Height="18"
-                    RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
-           </InlineUIContainer>
-          </TextBlock>
-          <Button Margin="0,12,0,0" Content="Add New Login" Command="{Binding ViewModel.AddLoginCommand}" />
-        </StackPanel>
-      </ui:Flyout>
-
-
-      <Button Margin="0,30,0,0" Content="Test Epic Reader" Command="{Binding ViewModel.TestEpicReaderCommand}" />
+      <ui:ListView ItemsSource="{Binding ViewModel.MyCollection}"
+             SelectedItem="{Binding ViewModel.SelectedItem}"
+             SelectionChanged="ListView_SelectionChanged">
+        <ui:ListView.ItemTemplate>
+          <DataTemplate>
+            <Border Padding="16,8">
+              <TextBlock Text="{Binding}" />
+            </Border>
+          </DataTemplate>
+        </ui:ListView.ItemTemplate>
+      </ui:ListView>
     </StackPanel>
 
     <!-- InfoBar anchored to the bottom row, with bottom margin -->
-    <ui:InfoBar Grid.Row="1" Title="Title" Message="Essential message." IsOpen="True"
+    <ui:InfoBar Grid.Row="1" Title="Hint" Message="To add a new login, check the Settings tab" IsOpen="True"
                 HorizontalAlignment="Stretch" Margin="0,0,0,20" />
   </Grid>
 </Page>

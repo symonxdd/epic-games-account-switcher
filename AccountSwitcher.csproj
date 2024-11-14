@@ -21,12 +21,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\emoji_heart.png" />
     <None Remove="Assets\emoji_mango.png" />
     <None Remove="Assets\wpfui-icon-256.png" />
     <None Remove="Assets\wpfui-icon-1024.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\emoji_heart.png" />
     <Resource Include="Assets\emoji_mango.png" />
     <Resource Include="Assets\wpfui-icon-256.png" />
     <Resource Include="Assets\wpfui-icon-1024.png" />

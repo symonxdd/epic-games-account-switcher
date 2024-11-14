@@ -6,11 +6,6 @@ namespace AccountSwitcher.ViewModels.Pages
   public partial class DashboardViewModel : ObservableObject
   {
     private readonly IEpicService _epicService;
-    private readonly IEpicLogReaderService _epicLogReaderService;
-
-    public IRelayCommand TestEpicReaderCommand { get; }
-    public IRelayCommand AddLoginCommand { get; }
-    public IRelayCommand OpenFlyoutCommand { get; }
 
     [ObservableProperty]
     private ObservableCollection<string> _myCollection;
@@ -18,18 +13,10 @@ namespace AccountSwitcher.ViewModels.Pages
     [ObservableProperty]
     private string? _selectedItem;
 
-    [ObservableProperty]
-    private bool _isFlyoutOpen;
-
     public DashboardViewModel(IEpicService epicService, IEpicLogReaderService epicLogReaderService)
     {
       _epicService = epicService;
-      _epicLogReaderService = epicLogReaderService;
       MyCollection = new ObservableCollection<string>();
-
-      TestEpicReaderCommand = new RelayCommand(OnTestEpicReader);
-      AddLoginCommand = new RelayCommand(OnAddLogin);
-      OpenFlyoutCommand = new RelayCommand(OnOpenFlyout);
     }
 
     public async Task LoadAccountStatusAsync()
@@ -67,25 +54,6 @@ namespace AccountSwitcher.ViewModels.Pages
       {
         SelectedItem = MyCollection[0];
       }
-    }
-
-    private async void OnAddLogin()
-    {
-      await _epicService.AddLoginAsync();
-    }
-
-    private void OnOpenFlyout()
-    {
-      IsFlyoutOpen = true;
-
-      // previously...
-      //var mainWindow = (MainWindow)Application.Current.MainWindow;
-      //mainWindow.ShowAddLoginDialogAsync();
-    }
-
-    private void OnTestEpicReader()
-    {
-      _epicLogReaderService.ExtractEpicLogDataAsync();
     }
   }
 }

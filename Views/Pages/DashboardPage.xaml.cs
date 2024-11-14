@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using AccountSwitcher.Services.Interfaces;
 using AccountSwitcher.ViewModels.Pages;
 using Wpf.Ui.Controls;
+using ListView = Wpf.Ui.Controls.ListView;
 
 namespace AccountSwitcher.Views.Pages
 {
@@ -53,9 +54,9 @@ namespace AccountSwitcher.Views.Pages
       }
     }
 
-    private async void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      var selectedUsername = (sender as ComboBox)?.SelectedItem as string;
+      var selectedUsername = (sender as ListView)?.SelectedItem as string;
 
       // Remove "(logged in)" suffix if it exists
       if (!string.IsNullOrEmpty(selectedUsername) && selectedUsername.EndsWith(" (logged in)"))
@@ -67,10 +68,6 @@ namespace AccountSwitcher.Views.Pages
       if (!_isProgrammaticChange)
       {
         await _epicService.SwitchAccountAsync(selectedUsername);
-
-        // Update ComboBox to show the selected item with "(logged in)" suffix
-        //UpdateComboBoxWithLoggedInStatus(selectedUsername);
-        //Debug.WriteLine("WHEW WHEW WHEW");
       }
     }
   }
