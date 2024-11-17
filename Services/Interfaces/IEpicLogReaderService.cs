@@ -2,6 +2,6 @@
 {
   public interface IEpicLogReaderService
   {
-    Task ExtractEpicLogDataAsync();
+    Task ExtractUsernameUserIdMappingsAsync();
   }
 }

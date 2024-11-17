@@ -3,11 +3,11 @@ using Wpf.Ui.Controls;
 
 namespace AccountSwitcher.Views.Pages
 {
-  public partial class DataPage : INavigableView<DataViewModel>
+  public partial class AliasesPage : INavigableView<AliasesViewModel>
   {
-    public DataViewModel ViewModel { get; }
+    public AliasesViewModel ViewModel { get; }
 
-    public DataPage(DataViewModel viewModel)
+    public AliasesPage(AliasesViewModel viewModel)
     {
       ViewModel = viewModel;
       DataContext = this;

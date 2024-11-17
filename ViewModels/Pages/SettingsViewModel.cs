@@ -46,7 +46,7 @@ namespace AccountSwitcher.ViewModels.Pages
 
     private void ExtractEpicLogDataAsync()
     {
-      _epicLogReaderService.ExtractEpicLogDataAsync();
+      _epicLogReaderService.ExtractUsernameUserIdMappingsAsync();
     }
 
     public void OnNavigatedTo()

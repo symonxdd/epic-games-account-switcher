@@ -53,11 +53,11 @@ namespace AccountSwitcher
 
           services.AddSingleton<DashboardViewModel>();
           services.AddSingleton<SettingsViewModel>();
-          services.AddSingleton<DataViewModel>();
+          services.AddSingleton<AliasesViewModel>();
 
           services.AddSingleton<DashboardPage>();
           services.AddSingleton<SettingsPage>();
-          services.AddSingleton<DataPage>();
+          services.AddSingleton<AliasesPage>();
 
         }).Build();
 

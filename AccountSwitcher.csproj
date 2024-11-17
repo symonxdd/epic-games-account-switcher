@@ -4,14 +4,14 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>wpfui-icon.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\capy_icon.ico</ApplicationIcon>
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wpfui-icon.ico" />
+    <Content Include="Assets\capy_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\capy_icon.png" />
+    <None Remove="Assets\capy_water.png" />
     <None Remove="Assets\emoji_heart.png" />
     <None Remove="Assets\emoji_mango.png" />
     <None Remove="Assets\wpfui-icon-256.png" />
@@ -28,6 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\capy_icon.png" />
+    <Resource Include="Assets\capy_water.png" />
     <Resource Include="Assets\emoji_heart.png" />
     <Resource Include="Assets\emoji_mango.png" />
     <Resource Include="Assets\wpfui-icon-256.png" />

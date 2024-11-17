@@ -20,6 +20,10 @@ namespace AccountSwitcher.Services
         BaseFolderName
     );
 
+    string activeSessionsFolder = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "Epic Switcher (those who know)", "Active Login Sessions");
+
     // Ensure the directory exists
     private readonly string outputFilePath;
 
@@ -41,7 +45,7 @@ namespace AccountSwitcher.Services
       outputFilePath = Path.Combine(appDataFolder, "username_id_mappings.txt");
     }
 
-    public async Task ExtractEpicLogDataAsync()
+    public async Task ExtractUsernameUserIdMappingsAsync()
     {
       // Find all log files with 'EpicGamesLauncher' in the filename
       var logFiles = Directory.GetFiles(logsDirectory, "*EpicGamesLauncher*.log")
@@ -123,27 +127,47 @@ namespace AccountSwitcher.Services
     {
       try
       {
-        // Read the existing content of the file to avoid duplicates
-        var existingLines = new HashSet<string>();
+        // Load existing mappings into a dictionary (userId -> username)
+        var existingMappings = new Dictionary<string, string>();
 
         if (File.Exists(outputFilePath))
         {
-          // Read all lines and store them in a HashSet (this will automatically handle duplicates)
-          existingLines = new HashSet<string>(File.ReadLines(outputFilePath));
+          foreach (var line in File.ReadLines(outputFilePath))
+          {
+            var parts = line.Split(": ");
+            if (parts.Length == 2)
+            {
+              existingMappings[parts[1]] = parts[0]; // userId -> username
+            }
+          }
         }
 
-        using var writer = new StreamWriter(outputFilePath, append: true);
-
-        foreach (var pair in _uniquePairs)
+        // Update existing mappings with _uniquePairs, renaming files if username changes
+        foreach (var (username, userId) in _uniquePairs)
         {
-          var line = $"{pair.username}: {pair.userId}";
-
-          // Only write if this line does not already exist in the file
-          if (!existingLines.Contains(line))
+          if (existingMappings.TryGetValue(userId, out var oldUsername) && oldUsername != username)
           {
-            writer.WriteLine(line);
-            existingLines.Add(line); // Add the line to the HashSet to track it for future checks
+            // Find and rename the file containing the old username
+            foreach (var filePath in Directory.GetFiles(activeSessionsFolder))
+            {
+              var fileName = Path.GetFileName(filePath);
+              if (fileName.Contains($"({userId}-{oldUsername})"))
+              {
+                var newFileName = fileName.Replace($"({userId}-{oldUsername})", $"({userId}-{username})");
+                var newFilePath = Path.Combine(activeSessionsFolder, newFileName);
+                File.Move(filePath, newFilePath);
+                break; // Rename only one matching file
+              }
+            }
           }
+          existingMappings[userId] = username;
+        }
+
+        // Write all mappings back to the file
+        using var writer = new StreamWriter(outputFilePath, append: false);
+        foreach (var (userId, username) in existingMappings)
+        {
+          writer.WriteLine($"{username}: {userId}");
         }
 
         Console.WriteLine($"Saved {_uniquePairs.Count} unique user mappings to file.");

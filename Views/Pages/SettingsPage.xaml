@@ -48,7 +48,7 @@
                      RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
             </InlineUIContainer>
           </TextBlock>
-          <Button Margin="0,12,0,0" Content="Add New Login" Command="{Binding ViewModel.AddLoginCommand}" />
+          <Button Margin="0,12,0,0" Content="Add new login" Command="{Binding ViewModel.AddLoginCommand}" />
         </StackPanel>
       </ui:Flyout>
 

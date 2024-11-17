@@ -16,6 +16,12 @@ namespace AccountSwitcher.ViewModels.Windows
                 Content = "Accounts",
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
                 TargetPageType = typeof(Views.Pages.DashboardPage)
+            },
+            new NavigationViewItem()
+            {
+                Content = "Aliases",
+                Icon = new SymbolIcon { Symbol = SymbolRegular.Tag24 },
+                TargetPageType = typeof(Views.Pages.AliasesPage)
             }
         };
 

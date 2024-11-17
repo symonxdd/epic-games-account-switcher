@@ -22,6 +22,9 @@
       <!-- Main content row takes up remaining space -->
       <RowDefinition Height="*"/>
 
+      <!-- Row for the image, just above the InfoBar -->
+      <RowDefinition Height="Auto" />
+
       <!-- Bottom row for InfoBar -->
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
@@ -31,8 +34,8 @@
       <TextBlock Margin="0,0,0,7" Text="Select account" />
 
       <ui:ListView ItemsSource="{Binding ViewModel.MyCollection}"
-             SelectedItem="{Binding ViewModel.SelectedItem}"
-             SelectionChanged="ListView_SelectionChanged">
+                  SelectedItem="{Binding ViewModel.SelectedItem}"
+                  SelectionChanged="ListView_SelectionChanged">
         <ui:ListView.ItemTemplate>
           <DataTemplate>
             <Border Padding="16,8">
@@ -43,8 +46,11 @@
       </ui:ListView>
     </StackPanel>
 
-    <!-- InfoBar anchored to the bottom row, with bottom margin -->
-    <ui:InfoBar Grid.Row="1" Title="Hint" Message="To add a new login, check the Settings tab" IsOpen="True"
+    <ui:Image ToolTipService.ToolTip="nie ma za co Julka UwU" Grid.Row="1" Source="pack://application:,,,/Assets/capy_water.png"
+              HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,50,0" Stretch="Uniform" Height="55"
+              RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
+
+    <ui:InfoBar Grid.Row="2" Title="Hint" Message="To add a new login, check the Settings tab" IsOpen="True"
                 HorizontalAlignment="Stretch" Margin="0,0,0,20" />
   </Grid>
 </Page>

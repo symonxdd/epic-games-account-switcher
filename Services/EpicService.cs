@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using AccountSwitcher.Models;
 using AccountSwitcher.Services.Interfaces;
 
 public class EpicService : IEpicService
@@ -14,6 +15,10 @@ public class EpicService : IEpicService
   private readonly string _logFilePath = Path.Combine(
       Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
       @"EpicGamesLauncher\Saved\Config\Windows\GameUserSettings.ini");
+  private readonly string _activeSessionsDir = Path.Combine(
+          Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+          BaseFolderName, "Active Login Sessions"
+      );
 
   private readonly string _mappingsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), BaseFolderName, MappingsFileName);
 
@@ -33,8 +38,6 @@ public class EpicService : IEpicService
 
   public async Task<string?> GetLoggedInUsername()
   {
-    // Indicate a logged-out state if no log or mapping file, or if log file indicates logged out user
-    // see IsUserLoggedInAsync()
     if (!File.Exists(_mappingsFilePath) || !File.Exists(_logFilePath) || !(await IsUserLoggedInAsync()))
       return "Logged Out";
 
@@ -49,20 +52,14 @@ public class EpicService : IEpicService
         string username = match.Groups[1].Value;
         string userId = match.Groups[2].Value;
 
-        //if (logContent.Contains(userId))
-        //{
-        //  return $"{username} (logged in)"; // Return username with suffix
-        //}
         if (logContent.Contains(userId))
         {
-          string targetDirectory = Path.Combine(
-              Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-              BaseFolderName, "Active Login Sessions"
-          );
+          Directory.CreateDirectory(_activeSessionsDir);
 
-          Directory.CreateDirectory(targetDirectory);
+          string matchedFileName = Directory.EnumerateFiles(_activeSessionsDir, "*", SearchOption.TopDirectoryOnly)
+                    .FirstOrDefault(file => Path.GetFileName(file).Contains(username, StringComparison.OrdinalIgnoreCase));
 
-          string targetFilePath = Path.Combine(targetDirectory, $"GameUserSettings ({userId}-{username}).ini");
+          string targetFilePath = Path.Combine(_activeSessionsDir, matchedFileName);
 
           File.Copy(_logFilePath, targetFilePath, overwrite: true);
 
@@ -74,34 +71,37 @@ public class EpicService : IEpicService
     return "Logged Out"; // Indicate logged-out state if no match found
   }
 
-  public async Task<List<string>> GetAllActiveLoginSessionsAsync()
+  public async Task<List<Session>> GetAllActiveLoginSessionsAsync()
   {
-    string activeSessionsDir = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        BaseFolderName, "Active Login Sessions"
-    );
+    var sessions = new List<Session>();
 
-    var usernames = new HashSet<string>();
-
-    if (Directory.Exists(activeSessionsDir))
+    if (Directory.Exists(_activeSessionsDir))
     {
-      var files = Directory.GetFiles(activeSessionsDir, "GameUserSettings*.ini");
+      var files = Directory.GetFiles(_activeSessionsDir, "GameUserSettings*.ini");
 
       foreach (var file in files)
       {
         string fileName = Path.GetFileNameWithoutExtension(file);
-        string pattern = @"GameUserSettings\s\((?<userId>[^-]+)-(?<username>.+)\)";
+        string pattern = @"GameUserSettings\s\((?<userId>[^-]+)-(?<username>[^-]+)(?:-(?<alias>.+))?\)";
         var match = Regex.Match(fileName, pattern);
 
         if (match.Success)
         {
+          string userId = match.Groups["userId"].Value;
           string username = match.Groups["username"].Value;
-          usernames.Add(username); // Add only unique usernames
+          string alias = match.Groups["alias"].Value;
+
+          sessions.Add(new Session
+          {
+            UserId = userId,
+            Username = username,
+            Alias = alias ?? username
+          });
         }
       }
     }
 
-    return usernames.ToList(); // Returns an empty list if no session files found
+    return sessions;
   }
 
   private async Task CloseEpicGamesLauncher()

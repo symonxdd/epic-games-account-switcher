@@ -45,7 +45,7 @@ namespace AccountSwitcher.Views.Windows
 
       if (Properties.Settings.Default.IsFirstRun)
       {
-        _epicLogReaderService.ExtractEpicLogDataAsync();
+        _epicLogReaderService.ExtractUsernameUserIdMappingsAsync();
 
         Properties.Settings.Default.IsFirstRun = false;
         Properties.Settings.Default.Save();
