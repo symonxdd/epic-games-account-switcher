@@ -22,7 +22,8 @@
 
   <ItemGroup>
     <None Remove="Assets\capy_icon.png" />
-    <None Remove="Assets\capy_water.png" />
+    <None Remove="Assets\capy_water_emerged.png" />
+    <None Remove="Assets\capy_water_submerged.png" />
     <None Remove="Assets\emoji_heart.png" />
     <None Remove="Assets\emoji_mango.png" />
     <None Remove="Assets\wpfui-icon-256.png" />
@@ -31,7 +32,8 @@
 
   <ItemGroup>
     <Resource Include="Assets\capy_icon.png" />
-    <Resource Include="Assets\capy_water.png" />
+    <Resource Include="Assets\capy_water_emerged.png" />
+    <Resource Include="Assets\capy_water_submerged.png" />
     <Resource Include="Assets\emoji_heart.png" />
     <Resource Include="Assets\emoji_mango.png" />
     <Resource Include="Assets\wpfui-icon-256.png" />
