@@ -46,7 +46,7 @@
       </ui:ListView>
     </StackPanel>
 
-    <ui:Image ToolTipService.ToolTip="nie ma za co Julka UwU" Grid.Row="1" Source="pack://application:,,,/Assets/capy_water.png"
+    <ui:Image ToolTipService.ToolTip="Jestem słodką, biedną kapibarą" Grid.Row="1" Source="pack://application:,,,/Assets/capy_water.png"
               HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,50,0" Stretch="Uniform" Height="55"
               RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
 
