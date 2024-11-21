@@ -10,9 +10,13 @@ Epic Switcher is designed to facilitate switching between accounts in the Epic G
 
 ![Main screen](./Demo/accounts.png) 
 
+<br/>
+
 ## Downloads
 
 Just choose the latest `.exe` file from the Releases section, or click [here]()
+
+<br/>
 
 ##  App screens
 
@@ -20,11 +24,15 @@ Just choose the latest `.exe` file from the Releases section, or click [here]()
 
 ![manage](./Demo/manage.png)
 
+<br/>
+
 **Understanding the process**
 
 ![how_it_works](./Demo/how_it_works.png) 
 
-**Possibility to enable flashbang-mode**
+<br/>
+
+**Possibility to enable blinl**
 
 ![settings](./Demo/settings.png) 
 
