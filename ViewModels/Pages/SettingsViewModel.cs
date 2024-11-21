@@ -1,15 +1,12 @@
-﻿using AccountSwitcher.Services.Interfaces;
+﻿using System.Diagnostics;
+using AccountSwitcher.Resources;
+using AccountSwitcher.Services.Interfaces;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
-namespace AccountSwitcher.ViewModels.Pages
-{
-  public partial class SettingsViewModel : ObservableObject, INavigationAware
-  {
+namespace AccountSwitcher.ViewModels.Pages {
+  public partial class SettingsViewModel : ObservableObject, INavigationAware {
     public IRelayCommand TestEpicReaderCommand { get; }
-    public IRelayCommand AddLoginCommand { get; }
-    public IRelayCommand OpenFlyoutCommand { get; }
-
     private readonly IEpicService _epicService;
     private readonly IEpicLogReaderService _epicLogReaderService;
 
@@ -19,63 +16,49 @@ namespace AccountSwitcher.ViewModels.Pages
     private bool _isFlyoutOpen;
 
     [ObservableProperty]
+    private string _currentSentence;
+
+    [ObservableProperty]
     private string _appVersion = string.Empty;
 
     [ObservableProperty]
     private ApplicationTheme _currentTheme = ApplicationTheme.Unknown;
 
-    public SettingsViewModel(IEpicService epicService, IEpicLogReaderService epicLogReaderService)
-    {
+    public SettingsViewModel(IEpicService epicService, IEpicLogReaderService epicLogReaderService) {
       _epicLogReaderService = epicLogReaderService;
       _epicService = epicService;
 
       TestEpicReaderCommand = new RelayCommand(ExtractEpicLogDataAsync);
-      AddLoginCommand = new RelayCommand(OnAddLogin);
-      OpenFlyoutCommand = new RelayCommand(OnOpenFlyout);
     }
 
-    private async void OnAddLogin()
-    {
-      await _epicService.AddLoginAsync();
-    }
-
-    private void OnOpenFlyout()
-    {
-      IsFlyoutOpen = true;
-    }
-
-    private void ExtractEpicLogDataAsync()
-    {
+    private void ExtractEpicLogDataAsync() {
       _epicLogReaderService.ExtractUsernameUserIdMappingsAsync();
     }
 
-    public void OnNavigatedTo()
-    {
+    public void OnNavigatedTo() {
+      CurrentSentence = CapybaraSentences.GetRandomSentence();
+
       if (!_isInitialized)
         InitializeViewModel();
     }
 
     public void OnNavigatedFrom() { }
 
-    private void InitializeViewModel()
-    {
+    private void InitializeViewModel() {
       CurrentTheme = ApplicationThemeManager.GetAppTheme();
       AppVersion = $" (Epic Switcher v{GetAssemblyVersion()})";
 
       _isInitialized = true;
     }
 
-    private string GetAssemblyVersion()
-    {
+    private string GetAssemblyVersion() {
       return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3)
           ?? string.Empty;
     }
 
     [RelayCommand]
-    private void OnChangeTheme(string parameter)
-    {
-      switch (parameter)
-      {
+    private void OnChangeTheme(string parameter) {
+      switch (parameter) {
         case "theme_light":
           if (CurrentTheme == ApplicationTheme.Light)
             break;
@@ -92,6 +75,23 @@ namespace AccountSwitcher.ViewModels.Pages
           ApplicationThemeManager.Apply(ApplicationTheme.Dark);
           CurrentTheme = ApplicationTheme.Dark;
 
+          break;
+      }
+    }
+
+    [RelayCommand]
+    private void OnFolderClicked(string parameter) {
+      switch (parameter) {
+        case "user_settings":
+          Process.Start("explorer.exe", Constants.Constants.GameUserSettingsDir);
+          break;
+
+        case "epic_switcher_dir":
+          Process.Start("explorer.exe", Constants.Constants.EpicSwitcherDir);
+          break;
+
+        case "epic_logs":
+          Process.Start("explorer.exe", Constants.Constants.LogsDirectory);
           break;
       }
     }

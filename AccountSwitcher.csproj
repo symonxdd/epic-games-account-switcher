@@ -22,20 +22,24 @@
 
   <ItemGroup>
     <None Remove="Assets\capy_icon.png" />
+    <None Remove="Assets\capy_sassy.png" />
     <None Remove="Assets\capy_water_emerged.png" />
     <None Remove="Assets\capy_water_submerged.png" />
     <None Remove="Assets\emoji_heart.png" />
     <None Remove="Assets\emoji_mango.png" />
+    <None Remove="Assets\paypal.png" />
     <None Remove="Assets\wpfui-icon-256.png" />
     <None Remove="Assets\wpfui-icon-1024.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Assets\capy_icon.png" />
+    <Resource Include="Assets\capy_sassy.png" />
     <Resource Include="Assets\capy_water_emerged.png" />
     <Resource Include="Assets\capy_water_submerged.png" />
     <Resource Include="Assets\emoji_heart.png" />
     <Resource Include="Assets\emoji_mango.png" />
+    <Resource Include="Assets\paypal.png" />
     <Resource Include="Assets\wpfui-icon-256.png" />
     <Resource Include="Assets\wpfui-icon-1024.png" />
   </ItemGroup>

@@ -4,8 +4,7 @@ using System.Text.RegularExpressions;
 using AccountSwitcher.Models;
 using AccountSwitcher.Services.Interfaces;
 
-public class EpicService : IEpicService
-{
+public class EpicService : IEpicService {
   private const string BaseFolderName = "Epic Switcher (those who know)";
   private const string MappingsFileName = "username_id_mappings.txt";
 
@@ -22,8 +21,7 @@ public class EpicService : IEpicService
 
   private readonly string _mappingsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), BaseFolderName, MappingsFileName);
 
-  private async Task<bool> IsUserLoggedInAsync()
-  {
+  private async Task<bool> IsUserLoggedInAsync() {
     if (!File.Exists(_logFilePath)) return false;
 
     string logContent = await File.ReadAllTextAsync(_logFilePath);
@@ -36,28 +34,30 @@ public class EpicService : IEpicService
     return false;
   }
 
-  public async Task<string?> GetLoggedInUsername()
-  {
+  public async Task<string?> GetLoggedInUsername() {
+    var real = await IsUserLoggedInAsync();
+
     if (!File.Exists(_mappingsFilePath) || !File.Exists(_logFilePath) || !(await IsUserLoggedInAsync()))
       return "Logged Out";
 
     var mappings = await File.ReadAllLinesAsync(_mappingsFilePath);
     var logContent = await File.ReadAllTextAsync(_logFilePath);
 
-    foreach (var line in mappings)
-    {
+    foreach (var line in mappings) {
       var match = Regex.Match(line, @"^(.+):\s+([a-f0-9]+)$");
-      if (match.Success)
-      {
+      if (match.Success) {
         string username = match.Groups[1].Value;
         string userId = match.Groups[2].Value;
 
-        if (logContent.Contains(userId))
-        {
+        if (logContent.Contains(userId)) {
           Directory.CreateDirectory(_activeSessionsDir);
 
           string matchedFileName = Directory.EnumerateFiles(_activeSessionsDir, "*", SearchOption.TopDirectoryOnly)
                     .FirstOrDefault(file => Path.GetFileName(file).Contains(username, StringComparison.OrdinalIgnoreCase));
+
+          if (string.IsNullOrEmpty(matchedFileName)) {
+            matchedFileName = $"GameUserSettings ({userId}-{username}).ini";
+          }
 
           string targetFilePath = Path.Combine(_activeSessionsDir, matchedFileName);
 
@@ -71,28 +71,23 @@ public class EpicService : IEpicService
     return "Logged Out"; // Indicate logged-out state if no match found
   }
 
-  public async Task<List<Session>> GetAllActiveLoginSessionsAsync()
-  {
+  public async Task<List<Session>> GetAllActiveLoginSessionsAsync() {
     var sessions = new List<Session>();
 
-    if (Directory.Exists(_activeSessionsDir))
-    {
+    if (Directory.Exists(_activeSessionsDir)) {
       var files = Directory.GetFiles(_activeSessionsDir, "GameUserSettings*.ini");
 
-      foreach (var file in files)
-      {
+      foreach (var file in files) {
         string fileName = Path.GetFileNameWithoutExtension(file);
         string pattern = @"GameUserSettings\s\((?<userId>[^-]+)-(?<username>[^-]+)(?:-(?<alias>.+))?\)";
         var match = Regex.Match(fileName, pattern);
 
-        if (match.Success)
-        {
+        if (match.Success) {
           string userId = match.Groups["userId"].Value;
           string username = match.Groups["username"].Value;
           string alias = match.Groups["alias"].Value;
 
-          sessions.Add(new Session
-          {
+          sessions.Add(new Session {
             UserId = userId,
             Username = username,
             Alias = alias ?? username
@@ -104,11 +99,9 @@ public class EpicService : IEpicService
     return sessions;
   }
 
-  private async Task CloseEpicGamesLauncher()
-  {
+  private async Task CloseEpicGamesLauncher() {
     var processes = Process.GetProcessesByName("EpicGamesLauncher");
-    if (processes.Length != 0)
-    {
+    if (processes.Length != 0) {
       var process = processes[0];
       process.Kill();
       await process.WaitForExitAsync();
@@ -117,8 +110,7 @@ public class EpicService : IEpicService
 
   private async Task StartEpicGamesLauncher() => await Task.FromResult(Process.Start(EpicGamesExePath));
 
-  public async Task AddLoginAsync()
-  {
+  public async Task AddLoginAsync() {
     await CloseEpicGamesLauncher();
 
     // Path where the `.ini` file should be copied
@@ -126,16 +118,14 @@ public class EpicService : IEpicService
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         @"EpicGamesLauncher\Saved\Config\Windows\GameUserSettings.ini");
 
-    if (File.Exists(destinationFilePath))
-    {
+    if (File.Exists(destinationFilePath)) {
       File.Delete(destinationFilePath);
     }
 
     await StartEpicGamesLauncher();
   }
 
-  public async Task SwitchAccountAsync(string selectedUsername)
-  {
+  public async Task SwitchAccountAsync(string selectedUsername) {
     // Close Epic Games Launcher
     await CloseEpicGamesLauncher();
 
@@ -153,15 +143,13 @@ public class EpicService : IEpicService
     var iniFileToCopy = Directory.GetFiles(activeSessionsFolder, "GameUserSettings*.ini")
                                   .FirstOrDefault(file => file.Contains(selectedUsername));
 
-    if (iniFileToCopy == null)
-    {
+    if (iniFileToCopy == null) {
       throw new FileNotFoundException("No session file found for the selected username.");
       //return;
     }
 
     // Delete the existing GameUserSettings.ini file, if it exists
-    if (File.Exists(destinationFilePath))
-    {
+    if (File.Exists(destinationFilePath)) {
       File.Delete(destinationFilePath);
     }
 

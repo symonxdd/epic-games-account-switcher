@@ -1,0 +1,102 @@
+﻿<Page
+  x:Class="AccountSwitcher.Views.Pages.AboutPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:helpers="clr-namespace:AccountSwitcher.Helpers"
+  xmlns:local="clr-namespace:AccountSwitcher.Views.Pages"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  Title="AboutPage"
+  d:DataContext="{d:DesignInstance local:AboutPage, IsDesignTimeCreatable=False}"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+  mc:Ignorable="d">
+  <Page.Resources>
+    <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+  </Page.Resources>
+
+  <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid.RowDefinitions>
+      <!-- Main content row takes up remaining space -->
+      <RowDefinition Height="*" />
+
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <!-- Main content stack placed in the first row -->
+    <StackPanel Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left"
+      VerticalAlignment="Top">
+      <TextBlock Width="550" TextWrapping="Wrap">
+        <InlineUIContainer>
+          <TextBlock TextWrapping="Wrap" Margin="0,0,0,0" FontWeight="Bold">TL;DR</TextBlock>          
+        </InlineUIContainer>
+        <LineBreak/>
+        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">No account logout occurs, merely copying &amp; moving of files.</TextBlock>          
+        <LineBreak/>
+        <Run Text="When you log into the Epic Launcher, it keeps the active login session in a file called GameUserSettings.ini."/>
+        <Run Text="Epic Switcher works by making a copy of that file."/>
+        <Run Text="As long as you don't log out from the Epic Launcher, the login session remains active."/>
+      </TextBlock>
+
+      <Border Margin="0,20,0,20">
+        <Separator Height="1" Background="#E1E1E1" />
+      </Border>
+
+      <TextBlock Width="550" TextWrapping="Wrap">
+        <InlineUIContainer BaselineAlignment="Center">
+          <ui:SymbolIcon Symbol="Info24" Width="16" Height="16" VerticalAlignment="Center" Margin="0,1,0,0" />
+        </InlineUIContainer>
+
+        <Run FontWeight="Bold" Text="Using this tool will not affect your accounts in any way."/> <LineBreak />
+        <Button Command="{Binding ViewModel.ShowTermsOfUseCommand}" Content="Terms of Use" Margin="0,10,0,0" />
+        <Button Command="{Binding ViewModel.ShowPrivacyPolicyCommand}" Content="Privacy Policy" Margin="5,0,0,0"/>
+      </TextBlock>
+    </StackPanel>
+
+    <TextBlock Grid.Row="1" Margin="0,0,0,0"  VerticalAlignment="Center" >
+      <Run Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
+    </TextBlock>
+
+    <StackPanel Grid.Row="2" Margin="0,0,0,20" Orientation="Horizontal" ToolTipService.ToolTip="the substance + those who know + locked in = winter arc">
+
+      <TextBlock Text="Crafted with " VerticalAlignment="Center" />
+      <Image Source="pack://application:,,,/Assets/emoji_heart.png" Width="18" Height="18"
+        RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Margin="0,0,0,0" />
+      <TextBlock VerticalAlignment="Center">
+        <Run Text=" Powered by"/>
+        <Hyperlink NavigateUri="https://wpfui.lepo.co/" RequestNavigate="Hyperlink_RequestNavigate">
+            <Run Text="WPF UI" />
+            <Hyperlink.Style>
+                <Style TargetType="Hyperlink">
+                    <Setter Property="Foreground" Value="{Binding ViewModel.AccentColor}" />
+                    <Setter Property="TextDecorations" Value="{x:Null}" />
+                </Style>
+            </Hyperlink.Style>
+        </Hyperlink>
+      </TextBlock>
+
+      <!-- <TextBlock Margin="7,0,0,0" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" VerticalAlignment="Center" /> -->
+    </StackPanel>
+
+    <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,20" Orientation="Horizontal"
+                HorizontalAlignment="Right">
+      <ui:HyperlinkButton Grid.Column="0" Content="GitHub"        
+                          RenderOptions.BitmapScalingMode="HighQuality"
+                          NavigateUri="https://github.com/symonxdd/epic-games-account-switcher" />
+      <ui:HyperlinkButton Grid.Column="0" Content="PayPal Me"        
+                          RenderOptions.BitmapScalingMode="HighQuality"
+                          Icon="{ui:ImageIcon 'pack://application:,,,/Assets/paypal.png'}"
+                          NavigateUri="https://paypal.me/symonxd" />
+    </StackPanel>
+  </Grid>
+</Page>

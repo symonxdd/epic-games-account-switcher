@@ -30,49 +30,53 @@
     </Grid.RowDefinitions>
 
     <!-- Main content stack placed in the first row -->
-    <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-      <TextBlock Margin="0,0,0,7" Text="Add new login" />
-      <Button Content="Add" Command="{Binding ViewModel.OpenFlyoutCommand}" />
-
-      <ui:Flyout Placement="MousePoint" IsOpen="{Binding ViewModel.IsFlyoutOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:SettingsPage}, Mode=TwoWay}">
-        <StackPanel>
-          <TextBlock Width="280" TextWrapping="Wrap">
-            <InlineUIContainer >
-              <TextBlock Margin="0,0,0,2" FontWeight="Bold">This will restart the Epic Games Launcher.</TextBlock>
-            </InlineUIContainer>
-            <LineBreak/>
-             
-            <Run Text="After you log into your other account, come back to switch!" />
-            <InlineUIContainer BaselineAlignment="Center">
-              <Image Source="pack://application:,,,/Assets/emoji_mango.png" Width="18" Height="18"
-                     RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
-            </InlineUIContainer>
-          </TextBlock>
-          <Button Margin="0,12,0,0" Content="Add new login" Command="{Binding ViewModel.AddLoginCommand}" />
-        </StackPanel>
-      </ui:Flyout>
-
-      <TextBlock Margin="0,0,0,7" Text="Perform a scan to find changed or new login usernames" />
+    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+      <TextBlock Margin="0,0,0,7" Text="Perform a scan to find updated or new login sessions" FontWeight="DemiBold" />
       <Button Margin="0,0,0,0" Content="Scan" Command="{Binding ViewModel.TestEpicReaderCommand}" />
 
-      <Border Margin="0,20,0,20">
-        <Separator Height="1" Background="#E1E1E1" />
-      </Border>
+      <TextBlock Margin="0,30,0,2" Text="Flashbang" FontWeight="DemiBold" />
+      <RadioButton Margin="0,0,0,0" Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}" CommandParameter="theme_light"
+         Content="Light" GroupName="themeSelect"
+         IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}" />
+      <RadioButton Margin="0,0,0,0" Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}" CommandParameter="theme_dark"
+         Content="Dark" GroupName="themeSelect"
+         IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
 
-      <TextBlock Margin="0,0,0,0" Text="Theme" />
-      <RadioButton Margin="0,12,0,0" Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}" CommandParameter="theme_light"
-                   Content="Light" GroupName="themeSelect"
-                   IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}" />
-      <RadioButton Margin="0,8,0,0" Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}" CommandParameter="theme_dark"
-                   Content="Dark" GroupName="themeSelect"
-                   IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
+      <TextBlock Text="Accessed directories" Margin="0,25,0,7" FontWeight="DemiBold" />
+      <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+          <Button Margin="0,0,10,0" CommandParameter="epic_switcher_dir" Content="Open" Command="{Binding ViewModel.FolderClickedCommand}" />
+          <TextBlock Text="Epic Switcher config" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+          <Button Margin="0,0,10,0" CommandParameter="user_settings" Content="Open" Command="{Binding ViewModel.FolderClickedCommand}" />
+          <TextBlock Text="Epic login session" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+          <Button Margin="0,0,10,0" CommandParameter="epic_logs" Content="Open" Command="{Binding ViewModel.FolderClickedCommand}" />
+          <TextBlock Text="Epic Launcher logs" VerticalAlignment="Center"/>
+        </StackPanel>
+      </StackPanel>
     </StackPanel>
 
-    <StackPanel Grid.Row="1" Margin="0,0,0,20" Orientation="Horizontal" ToolTipService.ToolTip="winter arc + those who know = the substance">
-      <TextBlock Text="Crafted with " VerticalAlignment="Center"/>
-      <Image Source="pack://application:,,,/Assets/emoji_heart.png" Width="18" Height="18"
-          RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Margin="0,0,0,0" />
-      <TextBlock Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
+    <!-- Capy situation -->
+    <StackPanel HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Bottom">
+      <!-- Image above -->
+      <Image 
+      Source="pack://application:,,,/Assets/capy_sassy.png" 
+      Stretch="Uniform" 
+      Height="150" 
+      RenderOptions.BitmapScalingMode="HighQuality"
+      HorizontalAlignment="Right" />
+
+      <!-- Text below -->
+      <TextBlock 
+      Text="{Binding ViewModel.CurrentSentence}" 
+      FontSize="14" 
+      FontStyle="Italic" 
+      Padding="0,10,0,20" 
+      Foreground="White" 
+      TextAlignment="Center" TextWrapping="Wrap" />
     </StackPanel>
   </Grid>
 </Page>

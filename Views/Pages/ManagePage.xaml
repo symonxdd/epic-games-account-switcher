@@ -1,0 +1,89 @@
+﻿<Page
+  x:Class="AccountSwitcher.Views.Pages.ManagePage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:AccountSwitcher.Views.Pages"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:models="clr-namespace:AccountSwitcher.Models"
+  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  Title="ManagePage"
+  d:DataContext="{d:DesignInstance local:ManagePage,
+                                     IsDesignTimeCreatable=False}"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+  ScrollViewer.CanContentScroll="False"
+  mc:Ignorable="d">
+
+  <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid.RowDefinitions>
+      <!-- Main content row takes up remaining space -->
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+
+    <!-- Main content stack placed in the first row -->
+    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left"
+      VerticalAlignment="Top">
+      <TextBlock Margin="0,0,0,8" Text="Add new login" FontWeight="DemiBold" />
+      <Button Content="Add" Command="{Binding ViewModel.OpenFlyoutCommand}" Margin="0,0,0,3" />
+
+      <ui:Flyout Placement="MousePoint" IsOpen="{Binding ViewModel.IsFlyoutOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ManagePage}, Mode=TwoWay}">
+        <StackPanel>
+          <TextBlock Width="280" TextWrapping="Wrap">
+            <InlineUIContainer>
+              <TextBlock Margin="0,0,0,2" FontWeight="Bold">This will restart the Epic Games Launcher.</TextBlock>
+            </InlineUIContainer>
+            <LineBreak/>    
+            <Run Text="After you log into your other account, come back to switch!" />
+            <InlineUIContainer BaselineAlignment="Center">
+              <Image Source="pack://application:,,,/Assets/emoji_mango.png" Width="18" Height="18"
+                    RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
+           </InlineUIContainer>
+          </TextBlock>
+          <Button Margin="0,12,0,0" Content="Add new login" Command="{Binding ViewModel.AddLoginCommand}" />
+        </StackPanel>
+      </ui:Flyout>
+
+      <TextBlock Margin="0,0,0,8" Text="Set alternate login names" FontWeight="DemiBold" />
+      <ItemsControl ItemsSource="{Binding ViewModel.MyCollection}" Width="250">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Padding="0,0,0,6">
+              <ui:TextBox Text="{Binding Alias, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                PlaceholderText="{Binding Username}" />
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <Button Content="Save" IsEnabled="{Binding ViewModel.IsSaveButtonEnabled}" Command="{Binding ViewModel.SaveCommand}" Margin="{Binding ViewModel.SaveButtonMargin}" />
+    </StackPanel>
+
+    <!-- Capy situation -->
+    <StackPanel HorizontalAlignment="Right" Margin="0,0,30,0" VerticalAlignment="Bottom">
+      <!-- Image above -->
+      <Image 
+        Source="pack://application:,,,/Assets/capy_sassy.png" 
+        Stretch="Uniform" 
+        Height="150" 
+        RenderOptions.BitmapScalingMode="HighQuality"
+        HorizontalAlignment="Right" />
+
+      <!-- Text below -->
+      <TextBlock 
+        Text="{Binding ViewModel.CurrentSentence}" 
+        FontSize="14" 
+        FontStyle="Italic" 
+        Padding="0,10,0,20" 
+        Foreground="White" 
+        TextAlignment="Center" TextWrapping="Wrap" />
+    </StackPanel>
+  </Grid>
+</Page>
