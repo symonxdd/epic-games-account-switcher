@@ -36,6 +36,4 @@ Just choose the latest `.exe` file from the Releases section, or click [here]()
 
 ![settings](./Demo/settings.png) 
 
----
-
 *the substance + those who know + locked in = winter arc*
