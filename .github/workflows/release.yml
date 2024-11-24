@@ -92,7 +92,7 @@ jobs:
             Set-Content $csprojPath
 
       - name: Build project
-        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true
+        run: dotnet publish -c Release -r win-x64
         env:
           VERSION: ${{ env.VERSION }}
 
