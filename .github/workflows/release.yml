@@ -60,10 +60,10 @@ jobs:
               # Debug output to confirm the removal
               Write-Output "Extracted Release Notes: $releaseNotes"
 
-              # Use a delimiter to set a multi-line environment variable
-              echo "RELEASE_NOTES<<EOF" | Out-File -Append -FilePath $Env:GITHUB_ENV
-              echo "$releaseNotes" | Out-File -Append -FilePath $Env:GITHUB_ENV
-              echo "EOF" | Out-File -Append -FilePath $Env:GITHUB_ENV
+              # Use a delimiter to set a multi-line environment variable with UTF-8 encoding
+              echo "RELEASE_NOTES<<EOF" | Out-File -Append -FilePath $Env:GITHUB_ENV -Encoding utf8
+              echo "$releaseNotes" | Out-File -Append -FilePath $Env:GITHUB_ENV -Encoding utf8
+              echo "EOF" | Out-File -Append -FilePath $Env:GITHUB_ENV -Encoding utf8
           }
 
       - name: Set up .NET
@@ -99,6 +99,13 @@ jobs:
 
       - name: Generate installer
         run: makensis installer_script.nsi
+
+      - name: Rename Installer with Tag
+        shell: powershell
+        run: |
+          $tag = $env:GITHUB_REF -replace '^refs/tags/', ''
+          $tag = $tag -replace '^v', ''  # Remove leading 'v' if necessary
+          Rename-Item -Path "SampleAppInstaller.exe" -NewName "SampleAppInstaller-$tag.exe"
 
       - name: Create a GitHub Release and upload the installer
         uses: softprops/action-gh-release@v2
