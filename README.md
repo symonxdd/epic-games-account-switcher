@@ -32,7 +32,7 @@ Just choose the latest `.exe` file from the Releases section, or click [here]()
 
 <br/>
 
-**Possibility to enable blinl**
+**Possibility to enable the great light mode**
 
 ![settings](./Demo/settings.png) 
 
