@@ -37,8 +37,8 @@ jobs:
               exit 1
           }
 
-          # Read the content of CHANGELOG.md
-          $content = Get-Content $changelogPath -Raw
+          # Read the content of CHANGELOG.md using UTF-8 without BOM
+          $content = Get-Content $changelogPath -Raw -Encoding utf8
 
           # Regex pattern to extract notes for the current version
           $pattern = "(?s)(## \[$version\].*?)(?=## \[|\Z)"
@@ -52,18 +52,17 @@ jobs:
               $releaseNotes = $matches[0].Groups[1].Value.Trim()
 
               # Remove the first line containing the version and date (e.g. "[2.0.18] - 2024-11-24")
-              # This is achieved by splitting the text into lines and removing the first line
               $lines = $releaseNotes -split "`n"  # Split the string by new lines
               $lines = $lines[1..($lines.Length - 1)]  # Remove the first line
               $releaseNotes = $lines -join "`n"  # Join the remaining lines back
 
-              # Debug output to confirm the removal
-              Write-Output "Extracted Release Notes: $releaseNotes"
+              # Debug output to confirm extraction
+              Write-Output "Extracted Release Notes:"
+              Write-Output $releaseNotes
 
-              # Use a delimiter to set a multi-line environment variable with UTF-8 encoding
-              echo "RELEASE_NOTES<<EOF" | Out-File -Append -FilePath $Env:GITHUB_ENV -Encoding utf8
-              echo "$releaseNotes" | Out-File -Append -FilePath $Env:GITHUB_ENV -Encoding utf8
-              echo "EOF" | Out-File -Append -FilePath $Env:GITHUB_ENV -Encoding utf8
+              # Ensure UTF-8 encoding without BOM when setting the environment variable
+              [System.Text.Encoding]::UTF8.GetBytes("RELEASE_NOTES<<EOF`n$releaseNotes`nEOF") |
+                  Set-Content -Path $Env:GITHUB_ENV -NoNewline -Encoding Byte
           }
 
       - name: Set up .NET
