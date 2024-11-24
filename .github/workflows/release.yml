@@ -112,6 +112,6 @@ jobs:
           files: EpicSwitcherSetup-${{ env.VERSION }}.exe
           name: "Epic Switcher ${{ env.VERSION }}"
           tag_name: "v${{ env.VERSION }}"
-          body: "🔥🥭💦"
+          body: ${{ env.RELEASE_NOTES }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
