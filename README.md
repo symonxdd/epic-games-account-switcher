@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="#" target="_blank">
+  <a href="#link_to_be_inserted" target="_blank">
     <img src="./Assets/capy_icon.png" alt="Project Icon" width="100" style="pointer-events: none;">
   </a>
   <h1>Epic Switcher</h1>
@@ -14,7 +14,7 @@ Epic Switcher is designed to facilitate switching between accounts in the Epic G
 
 ## Downloads
 
-Just choose the latest `.exe` file from the Releases section, or click [here]()
+Just choose the latest `.exe` file from the Releases section, or click [here](#link_to_be_inserted)
 
 <br/>
 

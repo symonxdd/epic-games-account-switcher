@@ -115,3 +115,44 @@ jobs:
           body: ${{ env.RELEASE_NOTES }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Construct installer download link
+        id: construct_link
+        shell: powershell
+        run: |
+          $repo = "${{ github.repository }}"
+          $version = "${{ env.VERSION }}"
+          $url = "https://github.com/$repo/releases/latest/download/EpicSwitcherSetup-$version.exe"
+          echo "DOWNLOAD_URL=$url" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8
+
+      - name: Update README.md
+        shell: powershell
+        run: |
+          # Define the path to the README.md file
+          $readmePath = "README.md"
+
+          # Read the content of README.md
+          $readme = Get-Content $readmePath
+
+          # Define the download URL (you can dynamically fetch this or hardcode it)
+          $downloadUrl = "${{ env.DOWNLOAD_URL }}"
+
+          # Replace href attributes that contain "#link_to_be_inserted" or ".exe"
+          $updated = $readme -replace "href='[^']*(#link_to_be_inserted|\.exe)[^']*'", "href='$downloadUrl'"
+
+          # Replace markdown links containing `#link_to_be_inserted` or `.exe` in the URL part and where the display text is 'here'
+          $updated = $updated -replace '\[here\]\([^\)]*(#link_to_be_inserted|\.exe)[^\)]*\)', "[here]($downloadUrl)"
+
+          # Save the updated content back to README.md
+          $updated | Set-Content $readmePath
+
+          # Output to confirm the script worked
+          Write-Host "README.md has been updated with the download link."
+
+      - name: Commit & push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          author_name: "github-actions[bot]"
+          author_email: "github-actions[bot]@users.noreply.github.com"
+          message: "Update README.md with latest release URL"
