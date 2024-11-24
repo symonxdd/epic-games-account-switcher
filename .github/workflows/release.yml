@@ -1,0 +1,111 @@
+name: Push Me Deep, Release Me Hard
+
+on:
+  push:
+    tags:
+      - "v*" # Trigger workflow on (new) tags, e.g., v1.0.0
+
+permissions:
+  contents: write # Ensure GITHUB_TOKEN has write permissions
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: get_version
+        shell: powershell
+        run: |
+          $version = "${{ github.ref }}" -replace "refs/tags/v", ""
+          echo "VERSION=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8
+
+      - name: Extract release notes from CHANGELOG.md
+        id: extract_notes
+        shell: powershell
+        run: |
+          $changelogPath = "CHANGELOG.md"
+          $version = "${{ github.ref }}" -replace "refs/tags/v", ""
+
+          Write-Output "Looking for release notes for version: $version"
+
+          # Check if CHANGELOG.md exists
+          if (-Not (Test-Path $changelogPath)) {
+              Write-Error "CHANGELOG.md file not found at $changelogPath"
+              exit 1
+          }
+
+          # Read the content of CHANGELOG.md
+          $content = Get-Content $changelogPath -Raw
+
+          # Regex pattern to extract notes for the current version
+          $pattern = "(?s)(## \[$version\].*?)(?=## \[|\Z)"
+          $matches = [regex]::Matches($content, $pattern)
+
+          if ($matches.Count -eq 0) {
+              Write-Output "No release notes found for version $version."
+              echo "RELEASE_NOTES=" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8
+          } else {
+              # Extract the release notes
+              $releaseNotes = $matches[0].Groups[1].Value.Trim()
+
+              # Remove the first line containing the version and date (e.g. "[2.0.18] - 2024-11-24")
+              # This is achieved by splitting the text into lines and removing the first line
+              $lines = $releaseNotes -split "`n"  # Split the string by new lines
+              $lines = $lines[1..($lines.Length - 1)]  # Remove the first line
+              $releaseNotes = $lines -join "`n"  # Join the remaining lines back
+
+              # Debug output to confirm the removal
+              Write-Output "Extracted Release Notes: $releaseNotes"
+
+              # Use a delimiter to set a multi-line environment variable
+              echo "RELEASE_NOTES<<EOF" | Out-File -Append -FilePath $Env:GITHUB_ENV
+              echo "$releaseNotes" | Out-File -Append -FilePath $Env:GITHUB_ENV
+              echo "EOF" | Out-File -Append -FilePath $Env:GITHUB_ENV
+          }
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install NSIS
+        shell: powershell
+        run: choco install nsis -y
+
+      - name: Update AssemblyVersion and FileVersion in .csproj
+        shell: powershell
+        run: |
+          $csprojPath = "AccountSwitcher.csproj"
+          $newVersion = $Env:VERSION  # The version extracted from GitHub tag
+
+          # Update AssemblyVersion and FileVersion in .csproj
+          Write-Output "Updating AssemblyVersion and FileVersion to $newVersion"
+
+          # Update AssemblyVersion (set it as <version>.0 for compatibility reasons)
+          (Get-Content $csprojPath) -replace '<AssemblyVersion>.*</AssemblyVersion>', "<AssemblyVersion>$newVersion.0</AssemblyVersion>" |
+            Set-Content $csprojPath
+
+          # Update FileVersion
+          (Get-Content $csprojPath) -replace '<FileVersion>.*</FileVersion>', "<FileVersion>$newVersion.0</FileVersion>" |
+            Set-Content $csprojPath
+
+      - name: Build project
+        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true
+        env:
+          VERSION: ${{ env.VERSION }}
+
+      - name: Generate installer
+        run: makensis installer_script.nsi
+
+      - name: Create a GitHub Release and upload the installer
+        uses: softprops/action-gh-release@v2
+        with:
+          files: EpicSwitcherSetup-${{ env.VERSION }}.exe
+          name: "Epic Switcher ${{ env.VERSION }}"
+          tag_name: "v${{ env.VERSION }}"
+          body: ${{ env.RELEASE_NOTES }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
