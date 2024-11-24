@@ -23,7 +23,7 @@ Or get the latest release from the [**Releases section**](https://github.com/sym
 
 ## 💡 Good to know
 
-The current installation does not include the required .NET runtime (version 8 or higher). If the runtime is not already installed on your system, Epic Switcher will prompt you upon launch and provide a direct link to the latest official download for quick and easy installation.
+The current installation does not include the required .NET runtime (version 8 or higher). If the runtime is not already installed on your system, Epic Switcher will prompt you upon launch and provide a direct link to the latest official download.
 
 ➡️ *A future release is planned to include a version with the packaged runtime for added convenience.*
 
