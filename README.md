@@ -14,7 +14,7 @@ Epic Switcher is designed to facilitate switching between accounts in the Epic G
 
 ## Downloads
 
-Just choose the latest `.exe` file from the Releases section, or click [here](https://github.com/symonxdd/epic-games-account-switcher/releases/latest/download/EpicSwitcherSetup-1.0.0.exe)
+Just choose the latest `.exe` file from the Releases section, or click [here](https://github.com/symonxdd/epic-games-account-switcher/releases/latest/download/EpicSwitcherSetup-0.0.1.exe)
 
 <br/>
 
