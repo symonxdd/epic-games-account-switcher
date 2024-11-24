@@ -105,7 +105,7 @@ jobs:
         run: |
           $tag = $env:GITHUB_REF -replace '^refs/tags/', ''
           $tag = $tag -replace '^v', ''  # Remove leading 'v' if necessary
-          Rename-Item -Path "SampleAppInstaller.exe" -NewName "SampleAppInstaller-$tag.exe"
+          Rename-Item -Path "EpicSwitcherSetup.exe" -NewName "EpicSwitcherSetup-$tag.exe"
 
       - name: Create a GitHub Release and upload the installer
         uses: softprops/action-gh-release@v2
@@ -113,6 +113,6 @@ jobs:
           files: EpicSwitcherSetup-${{ env.VERSION }}.exe
           name: "Epic Switcher ${{ env.VERSION }}"
           tag_name: "v${{ env.VERSION }}"
-          body: ${{ env.RELEASE_NOTES }}
+          body: "🔥🥭💦"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
