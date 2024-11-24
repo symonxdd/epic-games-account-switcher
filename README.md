@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="#link_to_be_inserted" target="_blank">
+  <a href='#link_to_be_inserted' target="_blank">
     <img src="./Assets/capy_icon.png" alt="Project Icon" width="100" style="pointer-events: none;">
   </a>
   <h1>Epic Switcher</h1>
