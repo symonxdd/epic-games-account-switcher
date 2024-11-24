@@ -100,7 +100,7 @@ jobs:
       - name: Generate installer
         run: makensis installer_script.nsi
 
-      - name: Rename Installer with Tag
+      - name: Rename installer with tag
         shell: powershell
         run: |
           $tag = $env:GITHUB_REF -replace '^refs/tags/', ''
